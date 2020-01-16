@@ -73,9 +73,14 @@
                 console.log(arg);
                 if(arg == 'success'){
                     document.querySelector('#noteSaveStat').innerHTML = 'Note save success!';
-                    setTimeout(textareaChangeHandler, 3000);
+                    setTimeout(textareaEmpty, 3000);
                 }
             });
         }
+
+        function textareaEmpty(){
+            document.querySelector('#noteSaveStat').innerHTML = '';
+        }
+        
     </script>
 </html>
