@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "electron": "^7.1.9"
+  },
+  "name": "electron-note",
+  "version": "1.0.0",
+  "description": "Electron note App",
+  "main": "index.js",
+  "scripts":{
+    "start": "electron ."
+  },
+  "author": "Beramo",
+  "license": "MIT"
+}

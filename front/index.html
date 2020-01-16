@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Electron Note App</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css">
+        <style>
+            header{
+                margin-top:2px;
+            }
+            h2{
+                margin:10px 0;
+                font-family: 'NanumSquare', sans-serif !important;
+            }
+            textarea{
+                width: 99%;
+                height: 320px;
+                resize: none;
+                font-size: 14px;
+            }
+            div.row h2{
+                display: inline;
+            }
+            div.row button#noteSave{
+                display: inline;
+                float: right;
+                padding: 6px 15px;
+                margin-top: 1px;
+                background-color: rgb(181, 214, 181);
+                color: rgba(0, 0, 0, 0.788);
+                outline: inherit;
+                border: none;
+                border-radius: 6px 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="row">
+                <h2>This is Simple Note App</h2>
+                <button type="button" id="noteSave" onclick="saveButtonClickHandler();">save</button>
+            </div>
+            <hr/>
+        </header>
+        <textarea placeholder="Wellcome! Write text here."></textarea>
+        <div id="noteSaveStat"></div>
+    </body>
+    <script>
+
+        const {ipcRenderer} = require('electron');
+        
+        (function(){
+            var appInitInfo = ipcRenderer.sendSync('app-init', 'init');
+
+            if(typeof appInitInfo != 'undefined'){
+                console.log(appInitInfo);
+
+                var title = appInitInfo.title;
+                var content = appInitInfo.content;
+
+                document.querySelector('title').innerText = title;
+                if(content != ''){
+                    document.querySelector('textarea').innerHTML = content.replace('\n','\r\n');
+                }
+            }
+        })();
+
+        function saveButtonClickHandler(){
+            var content = document.querySelector('textarea').value;
+            ipcRenderer.send('note-content', content);
+            ipcRenderer.on('note-save-stat', (event, arg)=>{
+                console.log(arg);
+                if(arg == 'success'){
+                    document.querySelector('#noteSaveStat').innerHTML = 'Note save success!';
+                    setTimeout(textareaChangeHandler, 3000);
+                }
+            });
+        }
+    </script>
+</html>
